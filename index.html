@@ -32,7 +32,23 @@
         <section class="section auth-section" id="auth-section">
             <h2>1. Connect Your Account</h2>
             <div class="form-group">
-                <label for="api-key">Pipedream API Key</label>
+                <label for="api-key">
+                    Pipedream API Key
+                    <span class="help-tooltip">
+                        <svg class="help-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div class="tooltip-content">
+                            <strong>How to find your API key:</strong>
+                            <ol>
+                                <li>Go to <a href="https://pipedream.com/settings/account" target="_blank" rel="noopener">pipedream.com/settings/account</a></li>
+                                <li>Scroll to the <strong>"API"</strong> section</li>
+                                <li>Click <strong>"Create API Key"</strong> or copy an existing key</li>
+                                <li>Paste it here</li>
+                            </ol>
+                        </div>
+                    </span>
+                </label>
                 <div class="password-input">
                     <input
                         type="password"
@@ -47,7 +63,24 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="org-id">Organization ID (Optional)</label>
+                <label for="org-id">
+                    Organization ID (Optional)
+                    <span class="help-tooltip">
+                        <svg class="help-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div class="tooltip-content">
+                            <strong>How to find your Organization ID:</strong>
+                            <ol>
+                                <li>Go to <a href="https://pipedream.com/orgs" target="_blank" rel="noopener">pipedream.com/orgs</a></li>
+                                <li>Click on your organization name</li>
+                                <li>Look at the URL - it will be: <code>pipedream.com/orgs/o_abc123</code></li>
+                                <li>Copy the part after <code>/orgs/</code> (e.g., <code>o_abc123</code>)</li>
+                            </ol>
+                            <p><em>Note: Only needed if you want to access organization-specific projects. Leave blank for personal projects.</em></p>
+                        </div>
+                    </span>
+                </label>
                 <input
                     type="text"
                     id="org-id"

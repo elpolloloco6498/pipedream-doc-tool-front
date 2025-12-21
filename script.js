@@ -401,15 +401,22 @@ function clearResults() {
 }
 
 /**
+ * Toggle help section
+ */
+function toggleHelp(helpId) {
+    const helpBox = document.getElementById(helpId);
+    if (helpBox.style.display === 'none') {
+        helpBox.style.display = 'block';
+    } else {
+        helpBox.style.display = 'none';
+    }
+}
+
+/**
  * Toggle CORS help section
  */
 function toggleCorsHelp() {
-    const corsHelp = document.getElementById('cors-help');
-    if (corsHelp.style.display === 'none') {
-        corsHelp.style.display = 'block';
-    } else {
-        corsHelp.style.display = 'none';
-    }
+    toggleHelp('cors-help');
 }
 
 /**
