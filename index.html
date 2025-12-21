@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipedream Documentation Generator</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <img src="https://pipedream.com/_static/embed-image.5f8189f7.png" alt="Pipedream Logo" class="logo">
+            <h1>Pipedream Documentation Generator</h1>
+            <p class="subtitle">Generate documentation for your Pipedream projects</p>
+        </header>
+
+        <!-- Privacy Disclaimer -->
+        <div class="info-banner">
+            <div class="info-content">
+                <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+                <div>
+                    <strong>Privacy First:</strong> This app performs processing only. Your API keys and workflow data are never stored. All processing happens in real-time and nothing is saved to any database or server.
+                </div>
+            </div>
+        </div>
+
+        <!-- Authentication Section -->
+        <section class="section auth-section" id="auth-section">
+            <h2>1. Connect Your Account</h2>
+            <div class="form-group">
+                <label for="api-key">Pipedream API Key</label>
+                <div class="password-input">
+                    <input
+                        type="password"
+                        id="api-key"
+                        placeholder="Enter your Pipedream API key"
+                        required
+                    >
+                    <button type="button" class="toggle-password" onclick="togglePassword()">
+                        <span class="show-text">Show</span>
+                        <span class="hide-text" style="display: none;">Hide</span>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="org-id">Organization ID (Optional)</label>
+                <input
+                    type="text"
+                    id="org-id"
+                    placeholder="Enter your organization ID (optional)"
+                >
+            </div>
+            <button
+                class="btn btn-primary"
+                id="connect-btn"
+                onclick="connectAndFetchProjects()"
+            >
+                <span class="btn-text">Connect</span>
+                <span class="spinner" style="display: none;"></span>
+            </button>
+            <div id="auth-error" class="error-message" style="display: none;"></div>
+        </section>
+
+        <!-- Project Selection Section -->
+        <section class="section project-section" id="project-section" style="display: none;">
+            <div class="section-header">
+                <h2>2. Select Projects</h2>
+                <div class="project-actions">
+                    <span id="project-count" class="count-badge">0 projects selected</span>
+                    <button class="btn btn-secondary btn-sm" onclick="toggleSelectAll()">
+                        <span id="select-all-text">Select All</span>
+                    </button>
+                </div>
+            </div>
+            <div id="projects-list" class="projects-grid"></div>
+            <div id="projects-error" class="error-message" style="display: none;"></div>
+        </section>
+
+        <!-- Generation Section -->
+        <section class="section generation-section" id="generation-section" style="display: none;">
+            <h2>3. Generate Documentation</h2>
+            <div class="form-group">
+                <label for="doc-type">Documentation Type</label>
+                <select id="doc-type" class="select-input">
+                    <option value="enhanced">AI-Enhanced (Recommended)</option>
+                    <option value="raw">Raw (Code & Steps Only)</option>
+                </select>
+            </div>
+            <div class="form-group" id="project-description-group">
+                <label for="project-description">Project Description (Required for AI-Enhanced)</label>
+                <textarea
+                    id="project-description"
+                    placeholder="Describe what these projects do..."
+                    rows="3"
+                ></textarea>
+                <small class="help-text">Provide a high-level description to help generate better documentation</small>
+            </div>
+            <button
+                class="btn btn-primary"
+                id="generate-btn"
+                onclick="generateDocumentation()"
+                disabled
+            >
+                <span class="btn-text">Generate Documentation</span>
+                <span class="spinner" style="display: none;"></span>
+            </button>
+            <div id="generation-progress" class="progress-container" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <p class="progress-text" id="progress-text"></p>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="section results-section" id="results-section" style="display: none;">
+            <div class="section-header">
+                <h2>4. Download Documentation</h2>
+                <div class="result-actions">
+                    <button class="btn btn-primary btn-sm" onclick="downloadAll()" id="download-all-btn">
+                        Download All
+                    </button>
+                    <button class="btn btn-secondary btn-sm" onclick="clearResults()">
+                        Start Over
+                    </button>
+                </div>
+            </div>
+            <div id="results-list" class="results-grid"></div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
