@@ -273,14 +273,16 @@ async function generateDocumentation() {
         progressText.textContent = `Generating documentation for "${project.name}" (${completed + 1}/${total})...`;
 
         try {
-            const endpoint = docType === 'enhanced'
-                ? `/projects/${projectId}/documentation?project_description=${encodeURIComponent(projectDescription)}`
-                : `/projects/${projectId}/raw-documentation`;
+            let endpoint;
+            if (docType === 'enhanced') {
+                endpoint = `/projects/${projectId}/documentation?project_description=${encodeURIComponent(projectDescription)}&claude_api_key=${encodeURIComponent(claudeApiKey)}`;
+            } else {
+                endpoint = `/projects/${projectId}/raw-documentation`;
+            }
 
             const headers = {
                 'X-Pipedream-API-Key': apiKey,
-                ...(orgId && { 'X-Org-Id': orgId }),
-                ...(docType === 'enhanced' && claudeApiKey && { 'X-Claude-API-Key': claudeApiKey })
+                ...(orgId && { 'X-Org-Id': orgId })
             };
 
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
