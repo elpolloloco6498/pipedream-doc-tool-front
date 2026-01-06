@@ -1,20 +1,42 @@
 // Global state
 let apiKey = '';
 let orgId = '';
+let claudeApiKey = '';
 let projects = [];
 let selectedProjects = new Set();
 let generatedDocs = [];
 
 // API Base URL - UPDATE THIS WITH YOUR ACTUAL API ENDPOINT
-const API_BASE_URL = 'https://pipedream-doc-tool.onrender.com'; // TODO: Replace with actual endpoint
+const API_BASE_URL = 'https://pipedream-doc-tool.onrender.com';
 
 /**
  * Toggle password visibility
  */
 function togglePassword() {
     const input = document.getElementById('api-key');
-    const showText = document.querySelector('.show-text');
-    const hideText = document.querySelector('.hide-text');
+    const button = input.nextElementSibling;
+    const showText = button.querySelector('.show-text');
+    const hideText = button.querySelector('.hide-text');
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        showText.style.display = 'none';
+        hideText.style.display = 'inline';
+    } else {
+        input.type = 'password';
+        showText.style.display = 'inline';
+        hideText.style.display = 'none';
+    }
+}
+
+/**
+ * Toggle Claude API key visibility
+ */
+function toggleClaudePassword() {
+    const input = document.getElementById('claude-api-key');
+    const button = input.nextElementSibling;
+    const showText = button.querySelector('.show-text');
+    const hideText = button.querySelector('.hide-text');
 
     if (input.type === 'password') {
         input.type = 'text';
@@ -209,18 +231,32 @@ async function generateDocumentation() {
     const progressContainer = document.getElementById('generation-progress');
     const progressFill = document.getElementById('progress-fill');
     const progressText = document.getElementById('progress-text');
+    const errorDiv = document.getElementById('generation-error');
     const docType = document.getElementById('doc-type').value;
     const projectDescription = document.getElementById('project-description').value.trim();
+    const claudeApiKeyInput = document.getElementById('claude-api-key');
 
     // Validate
     if (selectedProjects.size === 0) {
         return;
     }
 
-    if (docType === 'enhanced' && !projectDescription) {
-        alert('Please provide a project description for AI-enhanced documentation');
-        return;
+    // Validate AI-enhanced requirements
+    if (docType === 'enhanced') {
+        claudeApiKey = claudeApiKeyInput.value.trim();
+
+        if (!claudeApiKey) {
+            showError(errorDiv, 'Please provide a Claude API key for AI-enhanced documentation');
+            return;
+        }
+
+        if (!projectDescription) {
+            showError(errorDiv, 'Please provide a project description for AI-enhanced documentation');
+            return;
+        }
     }
+
+    hideError(errorDiv);
 
     // Show loading state
     setButtonLoading(generateBtn, true);
@@ -241,12 +277,15 @@ async function generateDocumentation() {
                 ? `/projects/${projectId}/documentation?project_description=${encodeURIComponent(projectDescription)}`
                 : `/projects/${projectId}/raw-documentation`;
 
+            const headers = {
+                'X-Pipedream-API-Key': apiKey,
+                ...(orgId && { 'X-Org-Id': orgId }),
+                ...(docType === 'enhanced' && claudeApiKey && { 'X-Claude-API-Key': claudeApiKey })
+            };
+
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'GET',
-                headers: {
-                    'X-Pipedream-API-Key': apiKey,
-                    ...(orgId && { 'X-Org-Id': orgId })
-                }
+                headers: headers
             });
 
             if (!response.ok) {
@@ -424,10 +463,14 @@ function toggleCorsHelp() {
  */
 document.getElementById('doc-type').addEventListener('change', function() {
     const descriptionGroup = document.getElementById('project-description-group');
+    const claudeApiKeyGroup = document.getElementById('claude-api-key-group');
+
     if (this.value === 'enhanced') {
         descriptionGroup.style.display = 'block';
+        claudeApiKeyGroup.style.display = 'block';
     } else {
         descriptionGroup.style.display = 'none';
+        claudeApiKeyGroup.style.display = 'none';
     }
 });
 

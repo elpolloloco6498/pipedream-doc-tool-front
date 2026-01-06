@@ -169,6 +169,6 @@ For issues or questions:
 3. Ensure credentials are valid
 4. Check network tab in browser dev tools
 
----
+### Monitoring
 
-Built with simplicity and user experience in mind.
+UptimeRobot page for monitoring: https://dashboard.uptimerobot.com/monitors/802029016
