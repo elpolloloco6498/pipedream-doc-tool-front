@@ -474,6 +474,18 @@ document.getElementById('doc-type').addEventListener('change', function() {
     }
 });
 
+// Initialize visibility on page load (since 'enhanced' is the default option)
+window.addEventListener('DOMContentLoaded', function() {
+    const descriptionGroup = document.getElementById('project-description-group');
+    const claudeApiKeyGroup = document.getElementById('claude-api-key-group');
+    const docType = document.getElementById('doc-type');
+
+    if (docType.value === 'enhanced') {
+        descriptionGroup.style.display = 'block';
+        claudeApiKeyGroup.style.display = 'block';
+    }
+});
+
 // Utility Functions
 
 /**
